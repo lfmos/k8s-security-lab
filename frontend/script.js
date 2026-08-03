@@ -126,7 +126,28 @@ function setOfflineState(error) {
   console.error("Erro ao consultar a API:", error);
 }
 
+function setGitHubPagesState() {
+  apiElements.indicator.classList.remove("offline");
+  apiElements.status.textContent = "DEMO";
+  apiElements.title.textContent = "Frontend publicado.";
+  apiElements.description.textContent =
+    "Demonstração estática no GitHub Pages. A API Flask funciona no ambiente Docker ou Kubernetes.";
+  apiElements.environment.textContent = "github-pages";
+  apiElements.version.textContent = "1.0.0";
+  apiElements.securityMode.textContent = "demo estática";
+  apiElements.lastCheck.textContent = formatTime(new Date());
+}
+
 async function checkApi() {
+  const isGitHubPages = window.location.hostname.endsWith("github.io");
+
+  if (isGitHubPages) {
+    setGitHubPagesState();
+    apiElements.button.disabled = false;
+    apiElements.button.textContent = "ATUALIZAR STATUS";
+    return;
+  }
+
   setCheckingState();
 
   try {
