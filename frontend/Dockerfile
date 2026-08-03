@@ -7,7 +7,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY index.html /usr/share/nginx/html/index.html
 COPY style.css /usr/share/nginx/html/style.css
 COPY script.js /usr/share/nginx/html/script.js
-COPY favicon.ico /usr/share/nginx/html/favicon.ico
+COPY favicon.png /usr/share/nginx/html/favicon.png
 
 RUN chown -R nginx:nginx /usr/share/nginx/html /var/cache/nginx \
     && mkdir -p /tmp/client_temp /tmp/proxy_temp /tmp/fastcgi_temp /tmp/uwsgi_temp /tmp/scgi_temp \
