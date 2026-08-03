@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+!*.example
+kubernetes/secret.yml
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
+tmp/
