@@ -1,0 +1,25 @@
+name: Kubernetes Security
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checkov:
+    name: Checkov - Hardened Manifests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Scan hardened Kubernetes manifests
+        run: |
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE:/workspace" \
+            bridgecrew/checkov:3.3.16 \
+            -d /workspace/scenarios/hardened \
+            --framework kubernetes
