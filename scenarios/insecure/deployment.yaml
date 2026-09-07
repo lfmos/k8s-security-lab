@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-security-lab-insecure
+  namespace: k8s-security-insecure
+  labels:
+    app: k8s-security-lab
+    profile: insecure
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-security-lab
+      profile: insecure
+  template:
+    metadata:
+      labels:
+        app: k8s-security-lab
+        profile: insecure
+    spec:
+      automountServiceAccountToken: true
+
+      containers:
+        - name: app
+          image: k8s-security-lab:v2
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 5000
+
+          securityContext:
+            runAsUser: 0
+            allowPrivilegeEscalation: true
+            readOnlyRootFilesystem: false
+            capabilities:
+              add:
+                - NET_RAW
