@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: unauthorized-client
+  namespace: k8s-security-hardened
+  labels:
+    role: test-client
+    access: unauthorized
+
+spec:
+  automountServiceAccountToken: false
+
+  securityContext:
+    seccompProfile:
+      type: RuntimeDefault
+
+  containers:
+    - name: curl
+      image: curlimages/curl:8.16.0
+
+      command:
+        - sleep
+        - "3600"
+
+      securityContext:
+        runAsNonRoot: true
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL

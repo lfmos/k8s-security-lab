@@ -1,4 +1,13 @@
+# Normalize text files
 * text=auto
-*.sh text eol=lf
-*.yml text eol=lf
+
+# Source code and configuration
+*.py text eol=lf
 *.yaml text eol=lf
+*.yml text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.sh text eol=lf
+
+# Container files
+Dockerfile text eol=lf

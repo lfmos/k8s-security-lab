@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: k8s-security-lab-hardened
+  namespace: k8s-security-hardened
+  labels:
+    app: k8s-security-lab
+    profile: hardened
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: k8s-security-lab
+      profile: hardened
+
+  template:
+    metadata:
+      labels:
+        app: k8s-security-lab
+        profile: hardened
+
+    spec:
+      serviceAccountName: k8s-security-lab
+      automountServiceAccountToken: false
+
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+
+      containers:
+        - name: app
+          image: k8s-security-lab:v2
+          imagePullPolicy: Never
+
+          ports:
+            - name: http
+              containerPort: 5000
+              protocol: TCP
+
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10001
+            runAsGroup: 10001
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+
+            capabilities:
+              drop:
+                - ALL
+
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
+
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 5000
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            timeoutSeconds: 2
+            failureThreshold: 3
+
+      volumes:
+        - name: tmp
+          emptyDir:
+            sizeLimit: 32Mi

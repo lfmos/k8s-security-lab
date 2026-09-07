@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-security-lab-insecure
+  namespace: k8s-security-insecure
+spec:
+  selector:
+    app: k8s-security-lab
+    profile: insecure
+  ports:
+    - name: http
+      port: 5000
+      targetPort: 5000
+  type: ClusterIP
