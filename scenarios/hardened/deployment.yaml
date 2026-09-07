@@ -7,6 +7,9 @@ metadata:
   labels:
     app: k8s-security-lab
     profile: hardened
+  annotations:
+    checkov.io/skip1: "CKV_K8S_15=Local Minikube lab uses an explicitly loaded local image and requires imagePullPolicy Never"
+    checkov.io/skip2: "CKV_K8S_43=Local workload image is built and loaded directly into Minikube; no registry digest is available"
 
 spec:
   replicas: 1
